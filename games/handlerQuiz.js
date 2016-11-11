@@ -18,8 +18,8 @@
 	*/
 
 	var jsonData;
-		firstData = getURLData("http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid'));
-		jsonData = JSON.parse(firstData.content);
+	var	firstData = getURLData("http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid'));
+	var	jsonData = JSON.parse(firstData.content);
 
 	//remove special strings	
 	function filterStrings(str){
@@ -43,7 +43,7 @@
 
 	//Return catagory !quiz cat "ID"
 	function changeSubject(id, sender){
-		if (isNaN(id) === true){
+		if (isNaN(id)){
 			return $.whisperPrefix(sender) + " ID Has to be a number.";
 		} else {
 			$.inidb.set('quiz', 'cid', id);

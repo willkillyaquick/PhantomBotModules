@@ -1,0 +1,11 @@
+$.lang.register('quiz.checkanswer.correct', '$1 has just answered the question correctly. $2 points to you my friend. Type !quiz ask to get next question...');
+$.lang.register('quiz.checkanswer.wrong', '$1,  sorry but that is not the right answer.  Please try again');
+$.lang.register('quiz.checkanswer.whisperanswer', '$1 $2');
+$.lang.register('quiz.getmultipleanswers.errorpoints', '$1 You dont have enought points to request a hint');
+$.lang.register('quiz.getmultipleanswers.clue', '$1 $2');
+$.lang.register('quiz.id.changesubject', 'Subject now: $1 with ID : $2: !quiz ask to see a question.');
+$.lang.register('quiz.id.errornumber', '$1 ID Has to be a number.');
+$.lang.register('quiz.info', '!quiz ask (Repeats question) !quiz answer (Type to answer question) !quiz skip (Skips cost 15 Points) !quiz clue (Whispers clues. Cost 20 Points) !quiz subject (Current catagory)!quiz id (changes quiz catagory. Needs Mod)');
+$.lang.register('quiz.pullrandomquestion.ask','$1  point question: $2 :Type !quiz answer ______ to answer the question.');
+$.lang.register('quiz.skipquestion.errorpoints', '$1 You dont have enought points to skip');
+$.lang.register('quiz.skipquestion.skipping', 'Skipping costed 15 points. Next $1');

@@ -10,10 +10,10 @@ lang/custom/custom-quizHandler.js --> ./scripts/lang/custom/custom-quizHandler.j
 REQUIRES <br/>
 
 custom/quizHandler.js <br/>
-lang/custom/custom-quizHandler.js <br/>
+lang/english/custom/custom-quizHandler.js <br/>
 
 #The Extra Life System Module
 REQUIRES <br/>
 
 custom/ExtraLifeSystem.js <br/>
-lang/custom/custom-extraLifeSystem.js <br/>
+lang/english/custom/custom-extraLifeSystem.js <br/>

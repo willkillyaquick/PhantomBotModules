@@ -17,3 +17,14 @@ REQUIRES <br/>
 
 custom/ExtraLifeSystem.js <br/>
 lang/english/custom/custom-extraLifeSystem.js <br/>
+
+<b>COMMANDS</b> # = Number only , ? = AlphaNumeric <br \>
+!extralife <br/>
+!extralife goal <br/>
+!extralife team <br/> 
+!extralife last <br/>
+!extralife id # <br/>
+!extralife teamid # <br/>
+!extralife name ? <br/>
+!extralife hospital ? <br/>
+!extralife emote ? <br/>

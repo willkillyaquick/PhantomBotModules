@@ -17,9 +17,9 @@
     *   
     */
 
-    var jsonData;
     var firstData = getURLData("http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid'));
     var jsonData = JSON.parse(firstData.content);
+	var answers = '';
 
     //remove special strings    
     function filterStrings(str){
@@ -55,9 +55,9 @@
     
     //skipQuestion
     function skipQuestion(sender){
-        setNonActive();
         if ($.getUserPoints(sender) > 14){
             $.inidb.decr('points', sender, 15);
+			setNonActive();
         } else {
             return $.lang.get('quiz.skipquestion.errorpoints', $.whisperPrefix(sender));
         }
@@ -79,13 +79,17 @@
         $.inidb.set('quiz', 'question', jsonData['clues'][$.inidb.get('quiz', 'qid')]['question']);
         $.inidb.set('quiz', 'answer', jsonData['clues'][$.inidb.get('quiz', 'qid')]['answer']);
         if (jsonData['clues'][$.inidb.get('quiz', 'qid')]['value'] == 0){
-            $.inidb.set('quiz', 'value', 10)
+            $.inidb.set('quiz', 'value', 10);
         } else {
             $.inidb.set('quiz', 'value', jsonData['clues'][$.inidb.get('quiz', 'qid')]['value']);
         }
-        for (i = 0; i < 3; i++){
-            var temp = Math.floor(Math.random() * jsonData.clues_count) + 1
-            $.inidb.set('quiz', 'randomclue' + i, jsonData['clues'][temp]['answer']);
+        for (i = 1; i <= 4; i++){
+            var temp = Math.floor(Math.random() * jsonData.clues_count) + 1;
+			if (jsonData['clues'][temp]['answer'] == $.inidb.get('quiz', 'answer')){
+				i -= 1;
+			} else {
+				$.inidb.set('quiz', 'randomclue' + i, jsonData['clues'][temp]['answer']);
+			}
         }
     }
     
@@ -103,39 +107,39 @@
             }
             storeData();
             setActive();
-        } 
-        return $.lang.get('quiz.pullrandomquestion.ask', Math.floor($.inidb.get('quiz', 'value')/10), $.inidb.get('quiz', 'question'));
+			answers = getMultipleAnswers();
+		}
+		return $.lang.get('quiz.pullrandomquestion.ask', Math.floor($.inidb.get('quiz', 'value')/10), $.inidb.get('quiz', 'question') + answers);
     }
     
     //checkAnswer
     function checkAnswer(str, sender){
-        if ($.inidb.get('quiz', 'answer').toLowerCase() == str.toLowerCase()){
-            setNonActive();
-            //GrantPoints
-            $.inidb.incr('points', sender ,Math.floor($.inidb.get('quiz', 'value')/10))
-            return $.lang.get('quiz.checkanswer.correct',sender, Math.floor($.inidb.get('quiz', 'value')/10)); //+ " points to you my friend. Type !quiz ask to get next question...";
-        }
-        $.say($.lang.get('quiz.checkanswer.whisperanswer',$.whisperPrefix(sender), pullRandomQuestion()));
-        return $.lang.get('quiz.checkanswer.wrong', sender);// + ", sorry but that is not the right answer.  Please try again";
+		if (getActive()){
+			if ($.inidb.get('quiz', 'answer').toLowerCase() == str.toLowerCase() || $.inidb.get('quiz', 'correct') == str.toLowerCase()){
+				setNonActive();
+				//GrantPoints
+				$.inidb.incr('points', sender ,Math.floor($.inidb.get('quiz', 'value')/10));
+				return $.lang.get('quiz.checkanswer.correct',sender, Math.floor($.inidb.get('quiz', 'value')/10)); //+ " points to you my friend. Type !quiz ask to get next question...";
+			}
+			$.say($.lang.get('quiz.checkanswer.whisperanswer',$.whisperPrefix(sender), pullRandomQuestion()));
+			return $.lang.get('quiz.checkanswer.wrong', sender);// + ", sorry but that is not the right answer.  Please try again";
+		}
+		return '###No Active Question###';
     }
-    
-    //return Multiple Answers Clues
-    function getMultipleAnswers(sender){
-        var str = 'Answer Hints Cost 20 points: ';
-        if ($.getUserPoints(sender) > 19){
-            $.inidb.decr('points', sender, 20);
-        } else {
-            return lang.get('quiz.getmultipleanswers.errorpoints',$.whisperPrefix(sender))// "You dont have enought points to request a hint";
-        }
-        var r = Math.floor((Math.random() * 4));
-        for (i = 0; i < 4; i++){
+    function getMultipleAnswers(){
+		var temp = 1;
+		var str = '###Type number of answer:'
+        var r = Math.floor((Math.random() * 4) + 1);
+        for (i = 1; i <= 4; i++){
             if (r == i){
-                str = str + $.inidb.get('quiz','answer') + ' : ';
+				$.inidb.set('quiz', 'correct', i);
+				str += '### ' + i + ': ' + $.inidb.get('quiz','answer');
             } else {
-            str = str + $.inidb.get('quiz','randomclue' + i) + ' : ';
+				str += '### ' + i + ': '+ $.inidb.get('quiz','randomclue' + temp);
+				temp = temp + 1;
             }
         }
-        return $.lang.get('quiz.getmultipleanswers.clue', $.whisperPrefix(sender), str);
+		return str;
     }
     
     /**
@@ -155,6 +159,7 @@
 
             if (args[0].equalsIgnoreCase('ask')) {
                 $.say(pullRandomQuestion());
+				//getMultipleAnswers();
                 return;
             }
             if (args[0].equalsIgnoreCase('skip')) {
@@ -163,7 +168,6 @@
             }
             if (args[0].equalsIgnoreCase('answer')) {
                 $.say(checkAnswer(args.slice(1, args.length).toString().replace(/\,/g," "), sender));
-                
                 return;
             }
             if (args[0].equalsIgnoreCase('id')) {
@@ -174,10 +178,10 @@
                 $.say($.lang.get('quiz.id.changesubject', $.inidb.get('quiz', 'title'), $.inidb.get('quiz','cid')));
                 return;
             }
-            if (args[0].equalsIgnoreCase('clue')) {
+            /* if (args[0].equalsIgnoreCase('clue')) {
                 $.say(getMultipleAnswers(sender));
                 return;
-            }
+            } */
         }
 
     });
@@ -189,8 +193,8 @@ $.bind('initReady', function() {
         if ($.bot.isModuleEnabled('./custom/handlerQuiz.js')) {
             $.registerChatCommand('./custom/handlerQuiz.js', 'quiz', 7);
             $.registerChatSubcommand('quiz', 'id', 2);
-
             //setInterval(function() { keepQuestionAlive(); }, 60e3);
         }
     });
-}) ();
+})
+ ();

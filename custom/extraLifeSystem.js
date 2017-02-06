@@ -225,7 +225,7 @@
             if (args[0].equalsIgnoreCase('emote')) {
                 $.inidb.set('extralife', 'emote', args[1]);
                 emoteLove = $.inidb.get('extralife','emote');
-                $.say($.lang.set('extralifesystem.emote.set',$.whisperPrefix(sender)));
+                $.say($.lang.get('extralifesystem.emote.set',$.whisperPrefix(sender)));
                 return;
             }
             

@@ -25,7 +25,7 @@ lang/english/custom/custom-extraLifeSystem.js <br/>
 !extralife last <br/>
 !extralife id # <br/>
 !extralife teamid # <br/>
-!extralife name ? <br/>
+!extralife nick ? <br/>
 !extralife hospital ? <br/>
 !extralife emote ? <br/>
 

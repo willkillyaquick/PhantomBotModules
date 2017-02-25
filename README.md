@@ -38,8 +38,8 @@ These four modules add a list of insults and praises to chat.  This will work in
 
 custom/insult.js <br/>
 custom/praise.js <br/>
-custom/discord-insult.js <br/>
-custom/discord-praise.js <br/>
+discord/custom/discord-insult.js (Only works with Phandotom bot 2.3.5 and on)<br/>
+discord/custom/discord-praise.js (Only works with Phandotom bot 2.3.5 and on)<br/>
 lang/english/custom/custom-insult.js <br/>
 lang/english/custom/custom-praise.js <br/>
 

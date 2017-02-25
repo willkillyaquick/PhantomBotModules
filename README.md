@@ -7,13 +7,13 @@ custom/quizHandler.js --> ./scripts/custom/quizHandler.js <br/>
 lang/custom/custom-quizHandler.js --> ./scripts/lang/custom/custom-quizHandler.js
 
 #The Quiz Handler module
-REQUIRES <br/>
+<b>REQUIRES</b> <br/>
 
 custom/quizHandler.js <br/>
 lang/english/custom/custom-quizHandler.js <br/>
 
 #The Extra Life System Module
-REQUIRES <br/>
+<b>REQUIRES</b> <br/>
 
 custom/ExtraLifeSystem.js <br/>
 lang/english/custom/custom-extraLifeSystem.js <br/>
@@ -25,6 +25,24 @@ lang/english/custom/custom-extraLifeSystem.js <br/>
 !extralife last <br/>
 !extralife id # <br/>
 !extralife teamid # <br/>
-!extralife name ? <br/>
+!extralife nick ? <br/>
 !extralife hospital ? <br/>
 !extralife emote ? <br/>
+
+#Insult and Praise Modules
+
+<b>ABOUT</b> <br/>
+These four modules add a list of insults and praises to chat.  This will work in twitch and discord if you have both setup in the botlogin.txt
+
+<b>REQUIRES</b> <br/>
+
+custom/insult.js <br/>
+custom/praise.js <br/>
+custom/discord-insult.js <br/>
+custom/discord-praise.js <br/>
+lang/english/custom/custom-insult.js <br/>
+lang/english/custom/custom-praise.js <br/>
+
+<b>COMMANDS</b> # = Number only , ? = AlphaNumeric <br \>
+!insult ? ? <br/>
+!praise ? ? <br/>

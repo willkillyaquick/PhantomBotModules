@@ -49,29 +49,28 @@
 	}
 	
 	/*
-	* @event discord
+	* @event discordCommand
 	*/
-    $.bind('discord', function(event) {
-        var discordChannel = event.getDiscordChannel(),
-            discordUser = event.getDiscordUser(),
-            discordMessage = event.getDiscordMessage(),
-			args = discordMessage.split(' ');
-
-        /* Don't read our own messages, this could create a loop. */
-        if ($.discord.jda().getSelfInfo().getId() == event.getId()) {
-            return;
-        }
+    $.bind('discordCommand', function(event) {
+        var channel = event.getChannel(),
+			args = event.getArgs(),
+			command = event.getCommand();
 
         /* Checks if the message is a command. */
-        if (discordMessage.startsWith('!insult ')) {
-			if (args.length < 3){
-				$.discord.sendMessage(event.getDiscordChannel(), ' You need a Name and a Reason like "!insult username he killed my game!"');	
+        if (command.equalsIgnoreCase('insult')) {
+			if (args.length < 2){
+				$.discord.say(channel, ' You need a Name and a Reason like "!insult username he killed my game!"');	
 			} 
-			else if (args.length >= 3){
-                $.discord.sendMessage(event.getDiscordChannel(),getInsult(args[1], args.slice(2, args.length).toString().replace(/\,/g," ")));
+			else if (args.length >= 2){
+                $.discord.say(channel ,getInsult(args[0], args.slice(1, args.length).toString().replace(/\,/g," ")));
             }
             return;
         }
     });
-	loadLang();
+	$.bind('initReady', function() {
+		if ($.bot.isModuleEnabled('./discord/custom/discord-insult.js')) {
+			$.discord.registerCommand('./discord/custom/discord-insult.js', 'insult', 0);
+			loadLang();
+		}
+	});
 })();

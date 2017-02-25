@@ -47,27 +47,29 @@
 		return $.lang.get('praise.random.' + ran, $.lang.get('praise.express.'+ r(langCount.express)), $.lang.get('praise.adj.'+ r(langCount.adj)), $.lang.get('praise.noun.'+ r(langCount.noun)), sender, message);
 	}
 	
-   $.bind('discord', function(event) {
-        var discordChannel = event.getDiscordChannel(),
-            discordUser = event.getDiscordUser(),
-            discordMessage = event.getDiscordMessage(),
-			args = discordMessage.split(' ');
-
-        /* Don't read our own messages, this could create a loop. */
-        if ($.discord.jda().getSelfInfo().getId() == event.getId()) {
-            return;
-        }
+	/*
+	* @event discordCommand
+	*/
+	$.bind('discordCommand', function(event) {
+        var channel = event.getChannel(),
+			args = event.getArgs(),
+			command = event.getCommand();
 
         /* Checks if the message is a command. */
-        if (discordMessage.startsWith('!praise ')) {
-			if (args.length < 3){
-				$.discord.sendMessage(event.getDiscordChannel(), ' You need a Name and a Reason like "!praise username you fixed my bot!"');	
+        if (command.equalsIgnoreCase('praise')) {
+			if (args.length < 2){
+				$.discord.say(channel, ' You need a Name and a Reason like "!praise username you fixed my bot!"');	
 			} 
-			else if (args.length >= 3){
-                $.discord.sendMessage(event.getDiscordChannel(),getPraise(args[1], args.slice(2, args.length).toString().replace(/\,/g," ")));
+			else if (args.length >= 2){
+                $.discord.say(channel ,getPraise(args[0], args.slice(1, args.length).toString().replace(/\,/g," ")));
             }
             return;
         }
     });
-	loadLang();
+	$.bind('initReady', function() {
+		if ($.bot.isModuleEnabled('./discord/custom/discord-praise.js')) {
+			$.discord.registerCommand('./discord/custom/discord-praise.js', 'praise', 0);
+			loadLang();
+		}
+	});
 })();

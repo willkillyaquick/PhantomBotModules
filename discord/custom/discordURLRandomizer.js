@@ -2,6 +2,7 @@
 	/** 
     *   @author WillKillYaQuick (Quack) will71110@yahoo.com
     *   2016/11/27
+	*	Update 2017/23/02
 	*/
 	
 	var currentKey = '',
@@ -119,48 +120,52 @@
 	* @params {string} discordMessage, {event} event
 	* @info Contains functions for the messages send from Discord
 	*/	
-	function checkKeywordList(discordMessage, event){
+	function checkKeywordList(event){
+		var discordChannel = event.getChannel(),
+			discordMessage = event.getArguments(),
+			isAdmin = event.isAdmin(),
+			args = event.getArgs();
+			
 		if (isKeywordThere(discordMessage)){
 			var tJSON = JSON.parse($.inidb.get(dbTable, discordMessage));
 			var jLength = getJSONkeyLength(tJSON);
 			var randomURL = Math.floor(Math.random() * jLength);
-			$.discord.sendMessage(event.getDiscordChannel(), tJSON[randomURL]);
+			$.discord.say(discordChannel, tJSON[randomURL]);
 		} else {
-			var messageSplit = discordMessage.split(' '),
-				messageKey = messageSplit[1].split('\\(')[0],
-				messageDigest = messageSplit[1].split('\\(')[1].split('\\)')[0];
-			if (messageSplit[0] == 'add' && event.isAdmin()){			
-				$.discord.sendMessage(event.getDiscordChannel(), addKeyURL(messageKey,messageDigest));		
+			var messageKey = args[0].split('\\(')[0],
+				messageDigest = args[0].split('\\(')[1].split('\\)')[0];
+			if (messageSplit[0] == 'add' && isAdmin){			
+				$.discord.say(discordChannel, addKeyURL(messageKey,messageDigest));		
 			}
-			else if (messageSplit[0] == 'del' && event.isAdmin()) {
-				$.discord.sendMessage(event.getDiscordChannel(), delKey(messageKey));
+			else if (args[0] == 'del' && isAdmin) {
+				$.discord.say(discordChannel, delKey(messageKey));
 			}
-			else if (messageSplit[0] == 'edit' && event.isAdmin()) {
-				$.discord.sendMessage(event.getDiscordChannel(), editKey(messageKey, messageDigest));
+			else if (args[0] == 'edit' && isAdmin) {
+				$.discord.say(discordChannel, editKey(messageKey, messageDigest));
 			}
-			else if (messageSplit[0] == 'show') {
-				$.discord.sendMessage(event.getDiscordChannel(), $.inidb.get(dbTable,  messageKey));
+			else if (args[0] == 'show') {
+				$.discord.say(discordChannel, $.inidb.get(dbTable,  messageKey));
 			}
 		}
 	}
 	
 	/*
-	* @event discord
+	* @event discordCommand
 	*/
-    $.bind('discord', function(event) {
-        var discordChannel = event.getDiscordChannel(),
-            discordUser = event.getDiscordUser(),
-            discordMessage = event.getDiscordMessage();
-
-        /* Don't read our own messages, this could create a loop. */
-        if ($.discord.jda().getSelfInfo().getId() == event.getId()) {
+    $.bind('discordCommand', function(event) {
+		var command = event.getCommand();
+			
+		if (command.equalsIgnoreCase('rurl')){
+			checkKeywordList(event);
             return;
-        }
-
-        /* Checks if the message is a command. */
-        if (discordMessage.startsWith('!rurl ')) {
-            checkKeywordList(discordMessage.substring(6), event);
-            return;
-        }
+		}
+		
     });
+	
+	$.bind('initReady', function() {
+		if ($.bot.isModuleEnabled('./discord/custom/discordURLRandomizer.js')) {
+            $.discord.registerCommand('./discord/custom/discordURLRandomizer.js', 'rurl', 0);
+		}
+	});
+	
 })();

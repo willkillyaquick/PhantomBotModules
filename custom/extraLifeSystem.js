@@ -89,7 +89,7 @@
      * @return {String} userInformation
      */
     function pullExtraLifeTotalGoal() {
-        var jsonObj = pullJSONData('http://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=' + extraLifeID + '&format=json');
+        var jsonObj = pullJSONData('https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=' + extraLifeID + '&format=json');
         var totalRaised = jsonObj['totalRaisedAmount'];
         var fundRaisingGoal = jsonObj['fundraisingGoal'];
         return $.lang.get('extralifesystem.pullextragoal.goal', nickName, totalRaised , fundRaisingGoal);
@@ -100,7 +100,7 @@
      * @return {string} teamInformation
      */
     function pullExtraLifeTeamTotalGoal() {
-        var jsonObj = pullJSONData('http://www.extra-life.org/index.cfm?fuseaction=donorDrive.team&teamID=' + extraLifeTeamID + '&format=json');
+        var jsonObj = pullJSONData('https://www.extra-life.org/index.cfm?fuseaction=donorDrive.team&teamID=' + extraLifeTeamID + '&format=json');
         var totalRaised = jsonObj['totalRaisedAmount'];
         var fundRaisingGoal = jsonObj['fundraisingGoal'];
         var teamName = jsonObj['name'];
@@ -113,7 +113,7 @@
      * 
      */
     function pullExtraLifeLastDonation() {
-        var jsonObj = pullJSONData('http://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&participantID=' + extraLifeID + '&format=json');
+        var jsonObj = pullJSONData('https://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&participantID=' + extraLifeID + '&format=json');
         if (jsonObj[0] === undefined) {
             return 'No recent donations found!';
         }
@@ -128,7 +128,7 @@
      * @function pullExtraLifeDonations
      */
     function pullExtraLifeDonationsInterval() {
-        var jsonObj = pullJSONData('http://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&participantID=' + extraLifeID + '&format=json');
+        var jsonObj = pullJSONData('https://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&participantID=' + extraLifeID + '&format=json');
         var firstRun = $.getIniDbBoolean('extralife', 'firstrun', true);
 
         if (jsonObj[0] === undefined) {

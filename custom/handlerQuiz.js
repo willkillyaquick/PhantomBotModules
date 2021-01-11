@@ -17,8 +17,8 @@
     *   
     */
 
-    var firstData = getURLData("http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid'));
-    var jsonData = JSON.parse(firstData.content);
+    var firstData = "http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid');
+    var jsonData = JSON.parse($.customAPI.get(firstData).content);
 	var answers = '';
 
     //remove special strings    
@@ -63,14 +63,6 @@
         }
         return $.lang.get('quiz.skipquestion.skipping', pullRandomQuestion()); 
     }
-
-    //Get URL Data
-    function getURLData(url){
-        var HttpResponse = Packages.com.gmt2001.HttpResponse;
-        var HttpRequest = Packages.com.gmt2001.HttpRequest;
-        var HashMap = Packages.java.util.HashMap;
-        return HttpRequest.getData(HttpRequest.RequestType.GET, url, "", new HashMap());
-    }
     
     //Store Data
     function storeData(){
@@ -102,8 +94,8 @@
             //Do we need to pull data again?
             if ($.inidb.get('quiz','lcid') != $.inidb.get('quiz','cid')){
                 $.inidb.set('quiz','lcid', $.inidb.get('quiz','cid'));
-                pullData = getURLData("http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid'));
-                jsonData = JSON.parse(pullData.content);
+                pullData = "http://jservice.io/api/category?id=" + $.inidb.get('quiz', 'cid');
+                jsonData = JSON.parse($.customAPI.get(pullData).content);
             }
             storeData();
             setActive();

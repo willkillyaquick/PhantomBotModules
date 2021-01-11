@@ -1,5 +1,5 @@
 #What Is This?
-These are custom modules that I have built for PhantomBot.  You have to install PhantomBot to get these to work.  You can find the bot at https://phantombot.tv/ and instructions to install the bot.  Once installed, you will need to copy over the the module files and folder structure to ./scripts/ located in the phantombot root folder.  
+These are custom modules that I have built for PhantomBot.  You have to install PhantomBot to get these to work.  You can find the bot at https://phantombot.github.io/PhantomBot/ and instructions to install the bot.  Once installed, you will need to copy over the the module files and folder structure to ./scripts/ located in the phantombot root folder.  
 
 Example: <br/>
 

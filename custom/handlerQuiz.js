@@ -2,7 +2,7 @@
     
     /** 
     *   @author WillKillYaQuick (Quack) will71110@yahoo.com
-    *   2021/01/11
+    *   2016/11/11
     *
     *   This module uses the API from http://jservice.io .  ID's for the questions can be found atan
     *   http://jservice.io/search .  Note that all the answer can be found on that site.  This is why
@@ -118,6 +118,19 @@
 		}
 		return '###No Active Question###';
     }
+	
+	function checkAnswerMuted(str, sender){
+		if (getActive()){
+			if ($.inidb.get('quiz', 'answer').toLowerCase() == str.toLowerCase() || $.inidb.get('quiz', 'correct') == str.toLowerCase()){
+				setNonActive();
+				//GrantPoints
+				$.inidb.incr('points', sender ,Math.floor($.inidb.get('quiz', 'value')/10));
+				$.say($.lang.get('quiz.checkanswer.correct',sender, Math.floor($.inidb.get('quiz', 'value')/10))); //+ " points to you my friend. Type !quiz ask to get next question...";
+			}
+			//$.say($.lang.get('quiz.checkanswer.whisperanswer',$.whisperPrefix(sender), pullRandomQuestion()));
+		}
+    }
+	
     function getMultipleAnswers(){
 		var temp = 1;
 		var str = '###Type number of answer:'
@@ -177,7 +190,20 @@
         }
 
     });
-    
+	
+	/**
+     * @event ircChannelMessage
+     */
+
+	$.bind('ircChannelMessage', function(event) {
+		if (getActive()){
+			sender = event.getSender(),
+			message = event.getMessage();
+			checkAnswerMuted(message, sender);
+			return;
+		}
+    });
+	
     /**
      * @event initReady
      */
